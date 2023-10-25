@@ -23,6 +23,23 @@ spec:
             requests:
               memory: "50Mi"
               cpu: "10m"
+          env:
+          - name: POSTGRESQL_DATABASE
+            valueFrom:
+                secretKeyRef:
+                  name: postgresql-persistent-parameters-59mrj
+                  key: POSTGRESQL_DATABASE
+          - name: POSTGRESQL_USER
+            valueFrom:
+                secretKeyRef:
+                  name: postgresql-persistent-parameters-59mrj
+                  key: POSTGRESQL_USER
+          - name: POSTGRESQL_PASSWORD
+            valueFrom:
+                secretKeyRef:
+                  name: postgresql-persistent-parameters-59mrj
+                  key: POSTGRESQL_PASSWORD
+
 ---
 kind: Service
 apiVersion: v1
