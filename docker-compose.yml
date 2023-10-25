@@ -1,0 +1,44 @@
+version: '3.9'
+services:
+  db:
+    container_name: db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    image: postgres
+    build:
+      context: .
+    restart: always
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
+      - ./db_scripts:/docker-entrypoint-initdb.d
+    ports:
+      - '5432:5432'
+
+  fastapi-app:
+    image: my.system:flask
+    container_name: fastapi-app
+    environment:
+      DATABASE_URI: "sampledb://apiadmin:password@db:5432/mydb"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: '/app'
+    command: bash -c "uvicorn main:app --host=0.0.0.0 --port=8081 --reload"
+    expose:
+      - 8081
+    ports:
+      - 8081:8081
+    volumes:
+      - ./fast-api-app:/app
+    depends_on:
+      db:
+        condition: service_started
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+
+
