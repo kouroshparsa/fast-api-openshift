@@ -6,7 +6,7 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: password
       POSTGRES_DB: mydb
-    image: postgres
+    image: postgres:14.1-alpine
     build:
       context: .
     restart: always
@@ -42,3 +42,6 @@ services:
         max_attempts: 3
 
 
+volumes:
+  db:
+    driver: local

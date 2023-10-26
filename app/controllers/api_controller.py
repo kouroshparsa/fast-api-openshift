@@ -1,14 +1,19 @@
 from app.models.model import Payment, Customer
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from app.database import SessionLocal
+from fastapi import HTTPException
 
+session = SessionLocal()
 
-def get_payment(db, id):
-    res = db.query(Payment).filter_by(payment_id=id).first()
+def get_payment(id):
+    res = session.query(Payment).filter_by(payment_id=id).first()
     return res
 
 
-def set_customer_status(db, email, active):
-    for row in db.query(Customer).filter_by(email=email).all():
+def set_customer_status(email, active):
+    matched = False
+    for row in session.query(Customer).filter_by(email=email).all():
         row.active = active
-    db.commit()
+        matched = True
+    if not matched:
+        raise HTTPException(status_code=404, detail="Email not found")
+    session.commit()
