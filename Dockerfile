@@ -15,6 +15,7 @@ ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 WORKDIR /app
 COPY requirements.txt /app/requirements.txt
+COPY main.py /app/main.py
 COPY app /app/
 RUN pip install -r requirements.txt
 
