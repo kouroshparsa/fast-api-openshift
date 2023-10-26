@@ -16,7 +16,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 WORKDIR /app
 COPY requirements.txt /app/requirements.txt
 COPY main.py /app/main.py
-COPY app /app/
+COPY app /app/app
 RUN pip install -r requirements.txt
 
 CMD ["uvicorn", "main:app", "--host=0.0.0.0", "--port=8081", "--reload"]
